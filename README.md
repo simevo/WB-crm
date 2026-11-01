@@ -43,6 +43,8 @@ Monorepo — Next.js frontend + NestJS/Prisma backend, DDD:
 │   │       ├── application/   # use-cases · repository ports
 │   │       └── infra/         # controllers · prisma repositories · adapters
 │   └── prisma/schema.prisma
+├── frontend/                  # Frontend Docker build (Dockerfile + prepare.sh for
+│                              # runtime injection of NEXT_PUBLIC_BACKEND_URL)
 ├── mobile/                    # Expo/React Native prospecting app (client of the same API)
 ├── e2e/                       # Playwright end-to-end tests
 ├── tests/                     # test setup & helpers
