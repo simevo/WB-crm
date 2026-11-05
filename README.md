@@ -77,11 +77,13 @@ Structuring each context this way keeps business rules independent of the framew
 
 2. Build and start the whole stack
 
-    a. Full Docker (frontend + backend + Postgres)
+    a. Full Docker (frontend + backend + Postgres), with locally built images:
 
         ```sh
         docker compose -f docker-compose.full.yml up --build
         ```
+
+        `docker-compose.full.yml` runs with images built in the CI (you can set the tag prefixing the command with `TAG=...`),.
 
     b. Frontend on the host
 
