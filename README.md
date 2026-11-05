@@ -68,21 +68,49 @@ Structuring each context this way keeps business rules independent of the framew
 
 ## Getting started
 
-```bash
-# 1. Configure environment
-cp .env.example .env            # DB + Google/API credentials
+1. Configure environments:
 
-# 2. Start Postgres and services
-docker compose up -d
+    ```sh
+    cp .env.example .env             # NEXTAUTH_SECRET etc. (frontend)
+    cp backend/.env.example backend/.env   # API keys for the backend, if not present
+    ```
 
-# 3. Install deps + run migrations
-npm install
-npm --prefix backend install
-npm --prefix backend run db:migrate      # applies Prisma migrations (backend owns the schema)
+2. Build and start the whole stack
 
-# 4. Run frontend + backend
-npm run dev
-```
+    a. Full Docker (frontend + backend + Postgres)
+
+        ```sh
+        docker compose -f docker-compose.full.yml up --build
+        ```
+
+    b. Frontend on the host
+
+        ```sh
+        # Start Postgres and services
+        docker compose up -d
+
+        # Install deps + run migrations
+        npm install
+        npm --prefix backend install
+        npm --prefix backend run db:migrate      # applies Prisma migrations (backend owns the schema)
+
+        # Run frontend + backend
+        npm run dev
+        ```
+
+3. To seed the admin user:
+
+      ```sh
+      export DATABASE_URL="postgresql://crm_user:dev_password_123@localhost:5499/crm_db?schema=public"
+      export ADMIN_EMAIL=your-email@example.com
+      export ADMIN_PASSWORD=your-secure-password
+      npm --prefix backend run db:seed
+      PGPASSWORD=dev_password_123 psql -p 5499 -U crm_user crm_db -h localhost -c 'update users set "emailVerified" = now();'
+      ```
+    Then try it out:
+
+    - Frontend: http://localhost:3000 (use the credentials above)
+    - Backend: http://localhost:3010 (Swagger at `/docs`)
 
 ## Tests
 
